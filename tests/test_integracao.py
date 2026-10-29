@@ -55,9 +55,10 @@ class RabbitMQIntegracao(unittest.TestCase):
         lines = []
 
         def ler():
-            for line in process.stdout:
-                lines.append(line.rstrip())
-                output.put(line.rstrip())
+            with process.stdout:
+                for line in process.stdout:
+                    lines.append(line.rstrip())
+                    output.put(line.rstrip())
 
         threading.Thread(target=ler, daemon=True).start()
         worker = (process, output, lines)
