@@ -104,21 +104,21 @@ class RabbitMQIntegracao(unittest.TestCase):
         self.assertEqual(result.method.message_count, 0)
         print("EVIDENCIA: worker executou o pedido e enviou ACK; fila vazia após sua saída.")
 
-    def test_03_dois_workers_dividem_pedidos(self):
-        a, b = self.iniciar_worker(), self.iniciar_worker()
-        pedidos = [f"Pedido {n}.." for n in range(1, 7)]
+    def test_03_tres_workers_dividem_seis_pedidos(self):
+        a, b, c = (self.iniciar_worker() for _ in range(3))
+        pedidos = [f"Pedido {n}..." for n in range(1, 7)]
         for pedido in pedidos:
             self.publicar(pedido)
         limite = time.monotonic() + 30
         prefixo = "[x] Finalizado processamento: "
         while time.monotonic() < limite:
-            finalizados = [line[len(prefixo):] for w in (a, b)
+            finalizados = [line[len(prefixo):] for w in (a, b, c)
                            for line in list(w[2]) if line.startswith(prefixo)]
             if len(finalizados) == len(pedidos):
                 break
             time.sleep(0.1)
         self.assertCountEqual(finalizados, pedidos)
-        for nome, worker in (("A", a), ("B", b)):
+        for nome, worker in (("A", a), ("B", b), ("C", c)):
             recebidos = [line for line in worker[2] if line.startswith(prefixo)]
             self.assertTrue(recebidos, f"Worker {nome} não recebeu pedidos")
             print(f"EVIDENCIA: worker {nome}: {recebidos}")

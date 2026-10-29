@@ -9,6 +9,7 @@ Projeto da atividade assíncrona baseado no **Minicurso — Mensageria com Rabbi
 ```text
 produtor.py → exchange padrão ("") → fila_pedidos → worker.py
                                                  → worker.py
+                                                 → worker.py
 ```
 
 - Comunicação assíncrona: o produtor pode enviar pedidos antes de existir um consumidor.
@@ -94,18 +95,20 @@ As métricas da interface podem levar alguns segundos para atualizar.
 
 Encerre os workers com `Ctrl+C` e execute `python produtor.py "Pedido pendente..."`. O pedido permanece em **Ready**. Inicie `python worker.py`: o pedido será entregue e confirmado após o processamento.
 
-### B. Divisão entre dois workers
+### B. Divisão entre três workers, como no final do vídeo
 
-Execute `python worker.py` em dois terminais. Em um terceiro:
+Execute `python worker.py` em três terminais. Em um quarto, envie seis pedidos em sequência:
 
 ```sh
 python produtor.py "Pedido 1..."
-python produtor.py "Pedido 2."
-python produtor.py "Pedido 3.."
-python produtor.py "Pedido 4."
+python produtor.py "Pedido 2..."
+python produtor.py "Pedido 3..."
+python produtor.py "Pedido 4..."
+python produtor.py "Pedido 5..."
+python produtor.py "Pedido 6..."
 ```
 
-Os consumidores dividem os pedidos; cada mensagem é entregue a um consumidor por vez. Com prefetch 1 e tempos diferentes, o worker que termina antes pode receber mais pedidos. Não há garantia de alternância estrita nem de ordem global de conclusão.
+Os consumidores dividem os pedidos; cada mensagem é entregue a um consumidor por vez. No vídeo, cada worker recebe dois dos seis pedidos. Os testes reproduzem os três workers e seis pedidos; a distribuição exata pode variar conforme o escalonamento dos processos. Com prefetch 1 e tempos diferentes, o worker que termina antes pode receber mais pedidos. Não há garantia de alternância estrita nem de ordem global de conclusão.
 
 ### C. Queda durante o processamento
 

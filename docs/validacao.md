@@ -22,4 +22,4 @@ O computador usado para preparar esta atividade não tinha Docker disponível. P
 
 A reinicialização do broker está documentada no README como situação manual adicional, mas **não faz parte dos quatro testes executados**. A propriedade de persistência da publicação foi conferida; isso, isoladamente, não equivale a testar recuperação após reinício do servidor.
 
-Consulte a [lista de execuções](https://github.com/tomitaaa/-RabbitMQ/actions) para a validação dos commits posteriores. A execução de referência acima também apontou avisos de fechamento dos arquivos de saída dos processos de teste; esse fechamento foi corrigido posteriormente.
+Consulte a [lista de execuções](https://github.com/tomitaaa/-RabbitMQ/actions) para a validação dos commits posteriores. A execução de referência acima também apontou avisos de fechamento dos arquivos de saída dos processos de teste; esse fechamento foi corrigido posteriormente. Após a revisão do trecho final do vídeo (aproximadamente 40–42 minutos), o teste de distribuição foi ajustado para **três workers e seis pedidos de três segundos**, reproduzindo a configuração demonstrada pelo professor.
